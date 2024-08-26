@@ -7,22 +7,25 @@
             <h2 class="text-xl">Check Out Your Result</h2>
             
             <div class="py-7">
-                <input v-model="studentId" class="border-black border-b-2" placeholder="Enter Your Id"/>
+                <input v-model="searchId" class="border-black border-b-2" placeholder="Enter Your Id"/>
                 
                 <div class="py-5">
-                    <button class="py-3 px-7 rounded-full text-white bg-red-800" @click="fetchResult">Check</button>
+                    <button class="py-3 px-7 rounded-full text-white bg-red-800" @click="fetchStudentResult">Check</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div v-if="result">
-        <h2 class="text-xl font-bold">Your Result:</h2>
-        <p class="text-center text-xl">{{ result }}</p>
+    <div v-if="studentResult">
+        <p class="text-xl font-bold text-center">Full Name: {{ studentResult.full_name }}</p>
+        <p class="text-center text-xl">Result: {{ studentResult.result }}</p>
     </div>
 
-    <div v-if="error" class="text-red-600 text-xl text-center">
-        <p>{{ error }}</p>
+    <div v-else-if="loading" class="text-red-600 text-xl text-center">
+        <p>Loading</p>
+    </div>
+    <div v-else-if="error">
+      <p>{{ error }}</p>
     </div>
 
     <div class="text-center py-36">
@@ -52,38 +55,44 @@
 
     </div>
 
+    
+
 
 </template>
 
 <script>
 import axios from 'axios';
 
-
-
-
-export default{
+export default {
     name: 'PageResult',
-    data(){
+    data() {
         return {
-            studentId: '',
-            result: null,
-            error: null,
-        }
+        searchId: '',
+        studentResult: null,
+        loading: false,
+        error: null,
+        };
     },
     methods: {
-        async fetchResult() {
-            try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/StudentResult/`, {
-                    params: { id: this.studentId },  mode: 'cors',  headers: {'Content-Type': 'application/json'},  method: 'GET', withCredentials: true
-                });
-                this.result = response.data.result;
-                this.error = null;
-            } catch (error) {
-                this.error = error.response ? error.response.data.error : 'Network Error';
-                this.result = null;
-            }
+        fetchStudentResult() {
+        if (!this.searchId) {
+            this.error = 'Please enter a student ID.';
+            return;
         }
-    }
-}
-
+        this.loading = true;
+        this.error = null;
+        axios.get(`http://127.0.0.1:8000/api/StudentResult/${this.searchId}`)
+            .then(response => {
+            console.log('Result: ', response.data)
+            this.studentResult = response.data;
+            this.loading = false;
+            })
+            .catch( error => {
+            console.log(error)
+            this.error = 'There was an error fetching the student result.';
+            this.loading = false;
+            });
+        },
+    },
+    };
 </script>
