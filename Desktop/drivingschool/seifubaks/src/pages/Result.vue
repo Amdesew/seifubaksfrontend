@@ -1,4 +1,5 @@
 <template>
+
     <div class="text-center">
         <h1 class="text-3xl py-20 font-bold">Practical Exam Result</h1>
 
@@ -58,6 +59,8 @@
 import axios from 'axios';
 
 
+
+
 export default{
     name: 'PageResult',
     data(){
@@ -70,8 +73,8 @@ export default{
     methods: {
         async fetchResult() {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/NewStudent/`, {
-                    params: { id: this.studentId }
+                const response = await axios.get(`http://127.0.0.1:8000/api/StudentResult/`, {
+                    params: { id: this.studentId },  mode: 'cors',  headers: {'Content-Type': 'application/json'},  method: 'GET', withCredentials: true
                 });
                 this.result = response.data.result;
                 this.error = null;
