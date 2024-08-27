@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <div class="center">
+        <h1>Seifu Baks New Students Form</h1>
+        Path: <a href="/results">/Results</a>
+
+
+        <table>
+            <tr>
+                <th>Full Name</th>
+                <th>Phone Number</th>
+                <th>Wanted Licence</th>
+            </tr>
+            {% for i in student %}
+                    <tr>
+                        <td>{{i.full_name}}</td>
+                        <td>{{i.phone_number}}</td>
+                        <td>{{i.wanted_licence}}</td>
+                    </tr>
+            {% endfor %}
+        </table>
+    
+    </div>
+</body>
+<style>
+    .center{
+        text-align: center;
+        margin: auto;
+        display: block;
+    }
+
+    table,tr, th{
+        text-align: center;
+    }
+</style>
+</html>
